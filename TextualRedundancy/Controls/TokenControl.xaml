@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="TextualRedundancy.Controls.TokenControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/StylesRepository.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/SolidColorBrushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource ApplicationBackground}">
+        <Border x:Name="GraphBorder" BorderBrush="#A0A0A0" BorderThickness="0" Margin="8" Padding="10">
+            <Border x:Name="GridBorder" BorderBrush="#606060" BorderThickness="0.45">
+                <DataGrid x:Name="ValueGrid" ItemsSource="{Binding Tokens, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" 
+                  AutoGenerateColumns="False" 
+                  AlternationCount="2"
+                  GridLinesVisibility="None"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="True"
+                  Margin="0"
+                  RowStyle="{StaticResource AlternateRowStyle}"
+                  Padding="0"
+                  Background="{StaticResource ApplicationBackground}"
+                  Width="Auto"
+                  BorderBrush="#606060" BorderThickness="0.65" 
+                  HeadersVisibility="Column"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ClipboardCopyMode="IncludeHeader"
+                  KeyUp="ValueGrid_KeyUp"
+                  Sorting="ValueGrid_Sorting"
+                  >
+
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#555555" />
+                                    <Setter Property="BorderBrush" Value="#555555"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn x:Name="ColumnToken" SortMemberPath="Token" Header="Token" IsReadOnly="True" Width="100*" MinWidth="100" ClipboardContentBinding="{Binding Token}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Token}" ToolTip="{Binding Token}" VerticalAlignment="Center" Foreground="#EEEEEE" Margin="5,0,6,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="ColumnLength" Header="Length" IsReadOnly="True" Width="Auto" SortMemberPath="Length" ClipboardContentBinding="{Binding Length}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Length}" ToolTip="{Binding Length}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Gray" Margin="10,0,10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="ColumnPosition" Header="Position" IsReadOnly="True" Width="Auto" SortMemberPath="Position" ClipboardContentBinding="{Binding Position}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Position}" ToolTip="{Binding Position}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Gray" Margin="10,0,10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="ColumnImpact" Header="Impact" IsReadOnly="True" Width="130" SortMemberPath="RelativeTokenLength" ClipboardContentBinding="{Binding RelativeTokenLength}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalAlignment="Stretch" Width="180" BorderBrush="#555555" BorderThickness="1" Background="#333333" Height="22" Margin="0,2,10,2">
+                                        <Grid>
+                                            <Grid Background="DarkOliveGreen" Height="20" Width="{Binding RelativeTokenLength}" HorizontalAlignment="Left"/>
+                                            <TextBlock Text="{Binding RelativeTokenLengthString}" Foreground="WhiteSmoke" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2,0,0,0" FontSize="9" Opacity="0.4"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="ColumnDistribution" Header="Distribution" IsReadOnly="True" Width="130" SortMemberPath="DistributionLength" ClipboardContentBinding="{Binding DistributionLength}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border HorizontalAlignment="Stretch" Width="180" BorderBrush="#555555" BorderThickness="1" Background="#333333" Height="22" Margin="0,2,10,2">
+                                        <Grid>
+                                            <Grid Background="SteelBlue" Height="20" Width="{Binding DistributionLength}" HorizontalAlignment="Left"/>
+                                            <TextBlock Text="{Binding DistributionLengthString}" Foreground="WhiteSmoke" Margin="2,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="9" Opacity="0.4"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="ColumnCount" Header="Occurrences" IsReadOnly="True" Width="Auto" SortMemberPath="Amount" ClipboardContentBinding="{Binding Amount}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Amount}" ToolTip="{Binding Amount}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#A0A7C0" Margin="10,0,10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

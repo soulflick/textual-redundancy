@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="TextualRedundancy.Controls.StatisticsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TextualRedundancy.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/StylesRepository.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/SolidColorBrushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <Style TargetType="Border" x:Key="BorderKey">
+                <Setter Property="Padding" Value="6,3,3,3"/>
+                <Setter Property="Background" Value="#222222"/>
+                <Setter Property="BorderBrush" Value="#666666"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            </Style>
+
+            <Style TargetType="Border" x:Key="BorderValue">
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="Background" Value="#333333"/>
+                <Setter Property="BorderBrush" Value="#666666"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="TextKey">
+                <Setter Property="Padding" Value="16,8,24,8"/>
+                <Setter Property="Foreground" Value="#E0E0E0"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontStyle" Value="Italic"/>
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="TextValue">
+                <Setter Property="Padding" Value="16,8,24,8"/>
+                <Setter Property="Foreground" Value="#F0F0F0"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border x:Name="GraphBorder" BorderBrush="#A0A0A0" BorderThickness="0" Margin="8" Padding="10">
+
+            <ListView x:Name="lvStatisticValues" ItemsSource="{Binding Values, UpdateSourceTrigger=PropertyChanged}"
+                  Margin="0" Padding="0" 
+                  Background="#202020" HorizontalAlignment="Center" VerticalAlignment="Top"
+                  BorderBrush="#606060" BorderThickness="0.45" 
+                  Width="Auto"
+                  Height="Auto">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100*" Loaded="KeyDef_Loaded"/>
+                                <ColumnDefinition  Width="100*" SharedSizeGroup="GridGroupValues" Loaded="ValDef_Loaded"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Style="{StaticResource BorderKey}" Padding="3" BorderThickness="0,0,0,0.5" BorderBrush="#505050">
+                                <TextBlock Margin="2" Text="{Binding Key}" Style="{StaticResource TextKey}"><Run Text=": "/></TextBlock>
+                            </Border>
+
+                            <Border Style="{StaticResource BorderValue}" Grid.Column="2" Padding="3" BorderThickness="0,0,0,0.5" BorderBrush="#505050">
+                                <TextBlock Margin="2" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextValue}"/>
+                            </Border>
+
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Focusable" Value="false"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel 
+									Orientation="Vertical" Margin="0"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Border>
+    </Grid>
+</UserControl>

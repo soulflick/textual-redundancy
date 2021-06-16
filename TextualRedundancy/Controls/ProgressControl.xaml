@@ -1,0 +1,105 @@
+﻿<Window x:Class="TextualRedundancy.Controls.ProgressControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TextualRedundancy.Controls"
+             mc:Ignorable="d" 
+             Padding="0"
+             WindowStartupLocation="CenterScreen"
+             ResizeMode="NoResize"
+             WindowStyle="None"
+             Topmost="True"
+             Height="300" Width="600">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/SolidColorBrushes.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <BitmapImage x:Key="imgClose">pack://application:,,,/TextualRedundancy;component/Images/close_inverted.png</BitmapImage>
+            <BitmapImage x:Key="imgMinimize">pack://application:,,,/TextualRedundancy;component/Images/minimize_inverted.png</BitmapImage>
+            
+            <SolidColorBrush x:Key="GraphicYellow">#7F5500</SolidColorBrush>
+            <SolidColorBrush x:Key="GraphicGray">#B0B0B0</SolidColorBrush>
+            <SolidColorBrush x:Key="GraphicGreen">#1D3F30</SolidColorBrush>
+            <SolidColorBrush x:Key="GraphicBlue">#215583</SolidColorBrush>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource ApplicationBackground}">
+        <Border BorderBrush="#A0A0A0" BorderThickness="0.65" Margin="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="100*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="#2A2A2A" Padding="0" MouseMove="Border_MouseMove">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Progress Analysis" Margin="5"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1"  HorizontalAlignment="Right">
+                            <Button Click="Minimize_Click" Style="{StaticResource WindowButton}" BorderThickness="0" Width="16" Height="16"
+                                    Margin="2,-2,2,0">
+                                <Image Source="{StaticResource imgMinimize}" Stretch="None" Width="10" Height="4" VerticalAlignment="Bottom" Margin="0,0,0,-4"/>
+                            </Button>
+                            <Button Click="CloseButton_Click" Style="{StaticResource CloseWindowButton}" 
+                                    BorderThickness="0" Width="16" Height="16"
+                                    Margin="2,-2,2,0">
+                                <Image Source="{StaticResource imgClose}" Width="10" Height="10"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ProgressBar x:Name="TotalProgress" Maximum="{Binding FileSize, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Height="24" Value="{Binding NumberOfBytes, UpdateSourceTrigger=PropertyChanged}" Background="Green" Opacity="0.4"/>
+                <TextBlock Grid.Row="1" Margin="5,0,0,0"><Run Text="Total ("/><Run Text="{Binding TotalPercent}"/><Run Text=" %)"/></TextBlock>
+
+                <TextBlock Grid.Row="2" Margin="5,0,0,0"><Run Text="Unique ("/><Run Text="{Binding PercentUnique}"/><Run Text=" %)"/></TextBlock>
+                <ProgressBar x:Name="UniqueProgress" Maximum="{Binding NumberOfTokens, UpdateSourceTrigger=PropertyChanged}" ToolTip="Unique Tokens (Amount)" Grid.Row="2" Height="24" Value="{Binding NumberUnique}" Opacity="0.4" Background="Gray"/>
+                <Grid Grid.Row="3" x:Name="GridByteDistribution">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" x:Name="CDWS"/>
+                        <ColumnDefinition Width="Auto" x:Name="CDNEW"/>
+                        <ColumnDefinition Width="Auto" x:Name="CDDUPL"/>
+                        <ColumnDefinition Width="100*" x:Name="CDREST"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Margin="5,0,3,0"><Run Text="("/><Run Text="{Binding PercentWhitespace, UpdateSourceTrigger=PropertyChanged}"/><Run Text=" %) Whitespace"/></TextBlock>
+                    <ProgressBar x:Name="LengthWhiteSpace" Maximum="100" Grid.Column="0" Value="100" ToolTip="Length of Whitespace Tokens" Background="{StaticResource GraphicGray}" Height="24" Opacity="0.4"/>
+                    <TextBlock Grid.Column="1" Margin="5,0,3,0"><Run Text="("/><Run Text="{Binding PercentNew, UpdateSourceTrigger=PropertyChanged}"/><Run Text=" %) New"/></TextBlock>
+                    <ProgressBar x:Name="LengthTokens" Maximum="100" Grid.Column="1" Value="100" ToolTip="Length of Unique Tokens" Background="{StaticResource GraphicGreen}" Height="24" Opacity="0.4"/>
+                    <TextBlock Grid.Column="2" Margin="5,0,3,0"><Run Text="("/><Run Text="{Binding PercentDuplicate, UpdateSourceTrigger=PropertyChanged}"/><Run Text=" %) Duplicate"/></TextBlock>
+                    <ProgressBar x:Name="LengthDuplicates" Maximum="100" Grid.Column="2" Value="100" ToolTip="Length of Redundant Tokens" Background="{StaticResource GraphicBlue}" Height="24" Opacity="0.4"/>
+
+                </Grid>
+
+                <Button Grid.Row="5" HorizontalAlignment="Right" Content="Stop" Style="{StaticResource WindowButton}" Foreground="White" Width="120"
+                        Margin="0" Background="#202020" Click="StopButton_Click"/>
+
+                <Border Grid.Row="4" BorderBrush="Gray" BorderThickness="0,0.5,0,0.5" Margin="0">
+                    <local:ActivationBitMap x:Name="ActivationMap"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

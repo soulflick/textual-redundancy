@@ -1,0 +1,158 @@
+﻿<Window x:Class="TextualRedundancy.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:TextualRedundancy.Controls"
+        mc:Ignorable="d"
+        Title="Textual Redundancy Analyzer" 
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="True"
+        Height="750" 
+        Width="800"
+        WindowStyle="None"
+        Padding="0"
+        Background="#333333"
+        MinWidth="210"
+        FontSize="13"
+        MinHeight="96"
+        >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/SolidColorBrushes.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/TextualRedundancy;component/Styles/Styles.xaml"/>
+                
+            </ResourceDictionary.MergedDictionaries>
+
+            <BitmapImage x:Key="imgGoFile">pack://application:,,,/TextualRedundancy;component/Images/GoFile_30x.png</BitmapImage>
+            <BitmapImage x:Key="imgClose">pack://application:,,,/TextualRedundancy;component/Images/close_inverted.png</BitmapImage>
+            <BitmapImage x:Key="imgNormalize">pack://application:,,,/TextualRedundancy;component/Images/normalize_inverted.png</BitmapImage>
+            <BitmapImage x:Key="imgMinimize">pack://application:,,,/TextualRedundancy;component/Images/minimize_inverted.png</BitmapImage>
+            <BitmapImage x:Key="imgUnpinAll">pack://application:,,,/TextualRedundancy;component/Images/ImgPin_x24.png</BitmapImage>
+            <BitmapImage x:Key="imgTile">pack://application:,,,/TextualRedundancy;component/Images/tiles_x32.png</BitmapImage>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="{StaticResource ApplicationBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100*"/>
+        </Grid.RowDefinitions>
+
+
+
+        <Grid MouseMove="Grid_MouseMove" MouseDown="Window_MouseDoubleClick">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="#181818" BorderThickness="0,0,0,0.5" BorderBrush="SteelBlue">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+
+
+
+                    <TextBlock Grid.Column="1" Text="Textual Redundancy Checker" Margin="7,0,0,0"/>
+
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+
+                        <Button Click="Minimize_Click" Style="{StaticResource WindowButton}" BorderThickness="0">
+                            <Image Source="{StaticResource imgMinimize}" Stretch="None" Width="12" Height="5" VerticalAlignment="Bottom" Margin="0,0,0,-8"/>
+                        </Button>
+
+                        <Button Click="Normalize_Click" Style="{StaticResource WindowButton}" BorderThickness="0">
+                            <!--  Background="#999999" -->
+                            <Image Source="{StaticResource imgNormalize}" Width="12" Height="12"/>
+                        </Button>
+
+                        <Button Click="Exit_Click" Style="{StaticResource CloseWindowButton}" BorderThickness="0" >
+                            <!-- Background="#A00303"-->
+                            <Image Source="{StaticResource imgClose}" Width="12" Height="12"/>
+                        </Button>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Border Background="#333333" BorderThickness="0,0,0,0.5" BorderBrush="SteelBlue">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnGoFile" Command="{Binding CmdOpenFile}" BorderThickness="0" Background="#999999" Opacity="0.8"
+                            ToolTip="Select a file to analyze">
+                        <Image Source="{StaticResource imgGoFile}"/>
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="0.2"/>
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <TextBlock Text="{Binding CurrentFileName}" Grid.Column="1" TextTrimming="CharacterEllipsis" Margin="16,0,16,0" FontSize="13" ToolTip="{Binding CurrentFileName}"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" MinWidth="488">
+            
+            <Border VerticalAlignment="Top" Height="32" Background="#222222" BorderBrush="#404040" BorderThickness="0,0,0,1"/>
+            <TabControl x:Name="MainTabControl" Background="#CCCCCC">
+                <TabItem x:Name="TabItemStatistics" Header="Statistics" VerticalAlignment="Center" Tag="0">
+                    <controls:StatisticsControl x:Name="StatisticsControl"/>
+                </TabItem>
+                <TabItem x:Name="TabItemMap" Header="Distribution" VerticalAlignment="Center" Tag="1">
+                    <controls:DistributionControl x:Name="DistrubutionControl"/>
+                </TabItem>
+                <TabItem x:Name="TabItemTokenGrid" Header="Tokens" VerticalAlignment="Center" Tag="2">
+                    <controls:TokenControl x:Name="TokenControl"/>
+                </TabItem>
+            </TabControl>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
+
+                <StackPanel Orientation="Horizontal" MouseDown="DockAll_MouseDown" ToolTip="Dock all Flyouts to the main control.">
+                    <TextBlock x:Name="tbDockAll" Text="dock all " VerticalAlignment="Center" Margin="0,8,8,0" FontSize="13" TextDecorations="Underline" Foreground="SteelBlue"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" MouseDown="ApplyLayout_MouseDown" ToolTip="Undock all controls to become flyouts.">
+                    <TextBlock x:Name="tbLayoutLink" Text="apply layout " VerticalAlignment="Center" Margin="0,8,8,0" FontSize="13" TextDecorations="Underline" Foreground="SteelBlue"/>
+                </StackPanel>
+                
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>

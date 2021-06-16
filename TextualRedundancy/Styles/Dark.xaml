@@ -1,0 +1,28 @@
+﻿<ResourceDictionary 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <Color x:Key="DefaultItemForeground">#E0E0E0</Color>
+    <Color x:Key="MenuTextBrushForeground">#CCCCCC</Color>
+    <Color x:Key="MenuDisabledTextForeGround">#808080</Color>
+    <Color x:Key="FirstColorBrush">LightSteelBlue</Color>
+    <Color x:Key="FirstColorLightBrush">LightSteelBlue</Color>
+    <Color x:Key="PrimaryBackgroundBrush">White</Color>
+    <Color x:Key="SecondBackgroundBrush">White</Color>
+    <Color x:Key="StandardTextForeground">#4682B4</Color>
+    
+    <Color x:Key="ImageBackgroundColor">Black</Color>
+    <Color x:Key="MenuColor">#030303</Color>
+    <Color x:Key="MenuTextColor">LightGray</Color>
+    <Color x:Key="GridAlternateColor">#101010</Color>
+    <Color x:Key="GridSelectionColor">#092634</Color>
+    <Color x:Key="GridSelectionTextColor">White</Color>
+    <Color x:Key="MenuHoverColor">White</Color>
+    <Color x:Key="MenuSelectionColor">WhiteSmoke</Color>
+
+    <Color x:Key="InactiveSelectionColor">#333333</Color>
+
+    <Color x:Key="MenuHighlightColor">#DDDDDD</Color>
+
+</ResourceDictionary>
